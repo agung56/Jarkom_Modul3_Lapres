@@ -40,7 +40,7 @@ visible_hostname mojokerto
 ```
 - `http_port 8080` merupakan port yang digunakan untuk mengakses proxy yaitu port 8080
 - `visible_hostname mojokerto` merupakan syntax nama proxy yang akan terlihat oleh user
-<br>
+
 - Restart squid dengan cara mengetikkan perintah seperti dibawah ini :
 ```
 service squid restart
