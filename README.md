@@ -4,15 +4,33 @@
 #### 2. Agung Mulyono (05311840000035)
 
 ### Setting Topologi
+![1](https://github.com/agung56/Jarkom_Modul3_Lapres_T8/blob/main/img/topologi.png)
 ### Setting DHCP Server
+* Install **isc-dhcp-server** pada **TUBAN** dengan menggunakan perintah<br> 
+`apt-get install isc-dhcp-server`<br>
+* Kemudian buka file konfigurasi interface dengan menggunakan perintah<br>
+`nano /etc/default/isc-dhcp-server`
+* Pada bagian **INTERFACES** isikan **eth0**<br>
+`INTERFACES="eth0"`
+![2](https://github.com/agung56/Jarkom_Modul3_Lapres_T8/blob/main/img/dhcpserver.png)
 ### Setting DHCP Relay
+* Install **isc-dhcp-relay** pada **SURABAYA** dengan menggunakan perintah <br>
+`apt-get install isc-dhcp-relay`<br>
+* Isikan **IP TUBAN** sebagai destinasi dhcp server
+* Buka file konfigurasi interface dengan menggunakan perintah<br>
+`nano /etc/default/isc-dhcp-relay`<br>
+* Pada bagian **INTERFACES** isikan **eth1 eth2 eth3**<br>
+`INTERFACES="eth1 eth2 eth3"`<br>
+![3](https://github.com/agung56/Jarkom_Modul3_Lapres_T8/blob/main/img/relay.png)
 
 ## Soal DHCP
 1. Seluruh client TIDAK DIPERBOLEHKAN menggunakan konfigurasi IP Statis.
 2. Client pada subnet 1 mendapatkan range IP dari 192.168.0.10 sampai 192.168.0.100 dan 192.168.0.110 sampai 192.168.0.200.
 3. Client pada subnet 3 mendapatkan range IP dari 192.168.1.50 sampai 192.168.1.70.
 4. Client mendapatkan DNS Malang dan DNS 202.46.129.2 dari DHCP
-5. Client di subnet 1 mendapatkan peminjaman alamat IP selama 5 menit, sedangkan (6) client pada subnet 3 mendapatkan peminjaman IP selama 10 menit.
+5. Client di subnet 1 mendapatkan peminjaman alamat IP selama 5 menit, sedangkan client pada subnet 3 mendapatkan peminjaman IP selama 10 menit.
+
+![4](https://github.com/agung56/Jarkom_Modul3_Lapres_T8/blob/main/img/dhcpconf.png)
 
 ## Soal Proxy
 ### Instalasi Squid
