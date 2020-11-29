@@ -11,7 +11,7 @@
 * Kemudian buka file konfigurasi interface dengan menggunakan perintah<br>
 `nano /etc/default/isc-dhcp-server`
 * Pada bagian **INTERFACES** isikan **eth0**<br>
-`INTERFACES="eth0"`
+`INTERFACES="eth0"`<br>
 ![2](https://github.com/agung56/Jarkom_Modul3_Lapres_T8/blob/main/img/dhcpserver.png)
 ### Setting DHCP Relay
 * Install **isc-dhcp-relay** pada **SURABAYA** dengan menggunakan perintah <br>
@@ -24,13 +24,53 @@
 ![3](https://github.com/agung56/Jarkom_Modul3_Lapres_T8/blob/main/img/relay.png)
 
 ## Soal DHCP
-1. Seluruh client TIDAK DIPERBOLEHKAN menggunakan konfigurasi IP Statis.
-2. Client pada subnet 1 mendapatkan range IP dari 192.168.0.10 sampai 192.168.0.100 dan 192.168.0.110 sampai 192.168.0.200.
-3. Client pada subnet 3 mendapatkan range IP dari 192.168.1.50 sampai 192.168.1.70.
-4. Client mendapatkan DNS Malang dan DNS 202.46.129.2 dari DHCP
-5. Client di subnet 1 mendapatkan peminjaman alamat IP selama 5 menit, sedangkan client pada subnet 3 mendapatkan peminjaman IP selama 10 menit.
+### 1. Seluruh client TIDAK DIPERBOLEHKAN menggunakan konfigurasi IP Statis.
+* Buka file konfigurasi interface network dengan memasukkan perintah 
+`nano /etc/network/interfaces`<br>
+* Kemudian ubah **iface eth0 inet static** menjadi **iface eth0 inet dhcp** pada semua client.<br>
+Hal ini bertujuan agar IP yang didapat oleh client diperoleh dari dhcp server yang ada di**TUBAN** dan dapat berubah pada selang waktu yang telah ditentukan
+* Setelah itu lakukan `service networking restart`
+### 2. Client pada subnet 1 mendapatkan range IP dari 192.168.0.10 sampai 192.168.0.100 dan 192.168.0.110 sampai 192.168.0.200
+### 3. Client pada subnet 3 mendapatkan range IP dari 192.168.1.50 sampai 192.168.1.70
+### 4. Client mendapatkan DNS Malang dan DNS 202.46.129.2 dari DHCP
+### 5. Client di subnet 1 mendapatkan peminjaman alamat IP selama 5 menit, sedangkan client pada subnet 3 mendapatkan peminjaman IP selama 10 menit.
+#### Penyelesaian nomor 2 sampai nomor 5
 
 ![4](https://github.com/agung56/Jarkom_Modul3_Lapres_T8/blob/main/img/dhcpconf.png)
+* Client 1 memiliki subnet **192.168.0.0** dan netmask **255.255.255.0**
+* Buka file konfigurasi dhcp dengan menggunakan perintah<br>
+`nano /etc/dhcp/dhcpd.conf`<br>
+* Isikan seperti dibawah ini
+```
+subnet 192.168.0.0 netmask 255.255.255.0 {
+   range 192.168.0.10 192.168.0.100; //range yang pertama (soal no.2)
+   range 192.168.0.110 192.168.0.200; //range yang kedua (soal no.2)
+   option routers 192.168.0.1;
+   option broadcast-address 192.168.0.255;
+   option domain-name-servers 10.151.83.146, 202.46.129.2; //(soal no.4)
+   default-lease-time 300; //Waktu peminjaman IP pada client 1 yaitu 5 menit atau 300 detik
+   max-lease-time 7200;
+}
+```
+* Client 3 memiliki subnet **192.168.1.0** dan netmask **255.255.255.0**
+* Buka file konfigurasi dhcp dengan menggunakan perintah<br>
+`nano /etc/dhcp/dhcpd.conf`<br>
+* Isikan seperti dibawah ini
+```
+subnet 192.168.1.0 netmask 255.255.255.0 {
+   range 192.168.1.50 192.168.1.70; //range IP yang disediakan DHCP (soal no.3)
+   option routers 192.168.1.1;
+   option broadcast-address 192.168.1.255;
+   option domain-name-servers 10.151.83.146, 202.46.129.2; //(soal no.4)
+   default-lease-time 600; //Waktu peminjaman IP pada client 3 yaitu 10 menit atau 600 detik
+   max-lease-time 7200;
+}
+```
+* Kemudian tambahkan satu subnet lagi yaitu
+`subnet 10.151.83.144 netmask 255.255.255.248 {}`<br>
+Dimana 10.151.83.144 merupakan NID DMZ yang digunakan oleh server **TUBAN** agar bisa terhubung ke router **SURABAYA** dan terhubung ke client
+* Setelah itu save file konfigurasi dan lakukan restart dengan menggunakan perintah
+`service isc-dhcp-server restart`<br>
 
 ## Soal Proxy
 ### Instalasi Squid
