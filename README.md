@@ -196,3 +196,37 @@ http_reply_access deny badsites
 ### 6. arena Bu Meguri dan Anri adalah tipe orang pelupa, maka untuk memudahkan mereka, Anri memiliki ide ketika menggunakan proxy cukup dengan mengetikkan domain janganlupa-ta.yyy.pw dan memasukkan port 8080. 
 (Keterangan : yyy adalah nama kelompok masing-masing. Contoh: janganlupa-ta.c01.pw)
 #### Penyelesaian :
+#### Instalasi Bind
+- Buka UML MALANG, kemudian lakukan update package list dengan menggunakan command :
+```
+apt-get update
+```
+- Menginstall aplikasi ***bind9*** dengan command :
+```
+apt-get install bind9 -y
+```
+#### Membuat Domain
+Pada soal ini, kita diminta untuk membuat domain ***janganlupa-ta.t08.pw***
+- Sebelum membuat domain, pastikan pada file VPN kita sudah berisi konfigurasi ***DHCP IP MALANG*** dengan `dhcp-option DNS IP MALANG`
+- Mengubah isi file ***named.conf.local*** dengan menggunakan command dibawah ini :
+```
+nano /etc/bins/named.conf.local
+```
+- Kemudian mengisi komfigurasi domain ***janganlupa-ta.t08.pw*** dengan menggunakan syntax seperti dibawah ini :
+```
+zone "janganlupa-ta.t08.pw" { 
+   type master;
+   file "/etc/bind/jarkom/janganlupa-ta.t08.pw";
+};
+```
+- Membuat folder jarkom di dalam /etc/bind `mkdir /etc/bind/jarkom`
+- Copy file ***db.local*** pada path ***/etc/bind*** ke dalam folder jarkom yang baru saja dibuat dan kemudian mengubah namanya menjadi janganlupa-ta.t08.pw, dengan command :
+```
+cp /etc/bind/db.local /etc/bind/jarkom/janganlupa-ta.t08.pw
+```
+- Buka file ***janganlupa-ta.t08.pw*** dan edit sesuai dengan syntax seperti dibawah ini :
+```
+nano /etc/bind/jarkom/janganlupa-ta.t08.pw
+```
+- Kemudian restart bind9 dengan perintah `service bind9 restart`
+- Masukkan domain ***janganlupa-ta.t08.pw*** pada host proxy dan 8080 sebagai portnya
